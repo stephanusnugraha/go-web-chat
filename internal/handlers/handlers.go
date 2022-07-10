@@ -114,12 +114,19 @@ func ListenToWsChannel() {
 			broadcastToAll(response)
 
 		case "left":
+			// handle the situation where a user leaves the page
 			response.Action = "list_users"
 			delete(clients, e.Conn)
 			users := getUserList()
 			response.ConnectedUsers = users
 			broadcastToAll(response)
+
+		case "broadcast":
+			response.Action = "broadcast"
+			response.Message = fmt.Sprintf("<strong>%s</strong>: %s", e.Username, e.Message)
+			broadcastToAll(response)
 		}
+
 	}
 }
 
